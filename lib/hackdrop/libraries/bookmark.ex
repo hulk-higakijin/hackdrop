@@ -1,5 +1,6 @@
 defmodule Hackdrop.Libraries.Bookmark do
   use Ecto.Schema
+  import UrlValidator
   import Ecto.Changeset
 
   schema "bookmarks" do
@@ -14,6 +15,7 @@ defmodule Hackdrop.Libraries.Bookmark do
     bookmark
     |> cast(attrs, [:url])
     |> validate_required([:url])
+    |> validate_url(:url)
     |> put_change(:user_id, user_scope.user.id)
   end
 end
