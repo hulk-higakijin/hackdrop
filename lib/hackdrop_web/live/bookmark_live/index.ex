@@ -64,7 +64,8 @@ defmodule HackdropWeb.BookmarkLive.Index do
   @impl true
   def handle_info({type, %Hackdrop.Libraries.Bookmark{}}, socket)
       when type in [:created, :updated, :deleted] do
-    {:noreply, stream(socket, :bookmarks, list_bookmarks(socket.assigns.current_scope), reset: true)}
+    {:noreply,
+     stream(socket, :bookmarks, list_bookmarks(socket.assigns.current_scope), reset: true)}
   end
 
   defp list_bookmarks(current_scope) do

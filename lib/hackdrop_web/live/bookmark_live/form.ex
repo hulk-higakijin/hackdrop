@@ -55,7 +55,13 @@ defmodule HackdropWeb.BookmarkLive.Form do
 
   @impl true
   def handle_event("validate", %{"bookmark" => bookmark_params}, socket) do
-    changeset = Libraries.change_bookmark(socket.assigns.current_scope, socket.assigns.bookmark, bookmark_params)
+    changeset =
+      Libraries.change_bookmark(
+        socket.assigns.current_scope,
+        socket.assigns.bookmark,
+        bookmark_params
+      )
+
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -64,7 +70,11 @@ defmodule HackdropWeb.BookmarkLive.Form do
   end
 
   defp save_bookmark(socket, :edit, bookmark_params) do
-    case Libraries.update_bookmark(socket.assigns.current_scope, socket.assigns.bookmark, bookmark_params) do
+    case Libraries.update_bookmark(
+           socket.assigns.current_scope,
+           socket.assigns.bookmark,
+           bookmark_params
+         ) do
       {:ok, bookmark} ->
         {:noreply,
          socket

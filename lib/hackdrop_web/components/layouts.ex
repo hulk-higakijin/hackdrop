@@ -35,38 +35,51 @@ defmodule HackdropWeb.Layouts do
 
   def app(assigns) do
     ~H"""
-    <header class="navbar px-4 sm:px-6 lg:px-8">
-      <div class="flex-1">
-        <a href="/" class="flex-1 flex w-fit items-center gap-2">
-          <img src={~p"/images/logo.svg"} width="36" />
-          <span class="text-sm font-semibold">v{Application.spec(:phoenix, :vsn)}</span>
-        </a>
-      </div>
-      <div class="flex-none">
-        <ul class="flex flex-column px-1 space-x-4 items-center">
-          <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
-          </li>
-          <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
-          </li>
-          <li>
-            <.theme_toggle />
-          </li>
-          <li>
-            <a href="https://phoenix.hexdocs.pm/overview.html" class="btn btn-primary">
-              Get Started <span aria-hidden="true">&rarr;</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </header>
+    <.sidebar_shell
+      for="sb-shell"
+      class="overflow-hidden rounded-lg"
+    >
+      <:sidebar>
+        <.sidebar_nav id="sb-shell" label="Main">
+          <:header>
+            <.icon name="hero-cube" class="w-5 h-5 shrink-0 text-primary-500" />
+            <span class="pc-sidebar__brand">Hackdrop</span>
+            <.sidebar_trigger for="sb-shell" class="ml-auto" />
+          </:header>
 
-    <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl space-y-4">
+          <.sidebar_group label="Workspace">
+            <.sidebar_item label="Dashboard" path="#" link_type="a" icon="hero-home" active />
+            <.sidebar_item label="Inbox" path="#" link_type="a" icon="hero-inbox" badge="12" />
+            <.sidebar_item label="Customers" path="#" link_type="a" icon="hero-users" />
+          </.sidebar_group>
+
+          <.sidebar_group label="Account">
+            <.sidebar_item label="Settings" icon="hero-cog-6-tooth" open>
+              <.sidebar_item label="Profile" path="#" link_type="a" />
+              <.sidebar_item label="Billing" path="#" link_type="a" />
+            </.sidebar_item>
+            <.sidebar_item label="Team" path="#" link_type="a" icon="hero-user-group" />
+          </.sidebar_group>
+
+          <:footer>
+            <.sidebar_item
+              label="Sign out"
+              path="#"
+              link_type="a"
+              icon="hero-arrow-left-start-on-rectangle"
+            />
+          </:footer>
+        </.sidebar_nav>
+      </:sidebar>
+
+      <header class="flex items-center flex-none gap-3 px-4 border-b border-gray-200 h-14 dark:border-gray-800">
+        <.sidebar_trigger for="sb-shell" target="mobile" />
+        <span class="text-sm font-semibold">Dashboard</span>
+      </header>
+      <div class="p-4 text-sm text-gray-500 dark:text-gray-400">
         {render_slot(@inner_block)}
       </div>
-    </main>
+    </.sidebar_shell>
 
     <.flash_group flash={@flash} />
     """
