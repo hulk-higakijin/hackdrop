@@ -21,6 +21,11 @@ defmodule HackdropWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/bookmarks", BookmarkLive.Index, :index
+    live "/bookmarks/new", BookmarkLive.Form, :new
+    live "/bookmarks/:id", BookmarkLive.Show, :show
+    live "/bookmarks/:id/edit", BookmarkLive.Form, :edit
   end
 
   # Other scopes may use custom stacks.
