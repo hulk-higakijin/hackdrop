@@ -57,19 +57,9 @@ defmodule HackdropWeb.Layouts do
             active={String.starts_with?(@current_path, "/bookmarks")}
           />
 
-          <.sidebar_group label="Workspace">
-            <.sidebar_item label="Dashboard" path="#" link_type="a" icon="hero-home" active />
-            <.sidebar_item label="Inbox" path="#" link_type="a" icon="hero-inbox" badge="12" />
-            <.sidebar_item label="Customers" path="#" link_type="a" icon="hero-users" />
-          </.sidebar_group>
-
-          <.sidebar_group label="Account">
-            <.sidebar_item label="Settings" icon="hero-cog-6-tooth" open>
-              <.sidebar_item label="Profile" path="#" link_type="a" />
-              <.sidebar_item label="Billing" path="#" link_type="a" />
-            </.sidebar_item>
-            <.sidebar_item label="Team" path="#" link_type="a" icon="hero-user-group" />
-          </.sidebar_group>
+          <.sidebar_item label="未分類" path="#" link_type="a" icon="hero-tag" />
+          <.sidebar_item label="お気に入り" path="#" link_type="a" icon="hero-star" />
+          <.sidebar_item label="あとで読む" path="#" link_type="a" icon="hero-clipboard-document-check" />
 
           <:footer>
             <.sidebar_item
