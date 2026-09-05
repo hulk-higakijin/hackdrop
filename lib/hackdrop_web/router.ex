@@ -22,10 +22,6 @@ defmodule HackdropWeb.Router do
 
     get "/", PageController, :home
 
-    live "/bookmarks", BookmarkLive.Index, :index
-    live "/bookmarks/new", BookmarkLive.Form, :new
-    live "/bookmarks/:id", BookmarkLive.Show, :show
-    live "/bookmarks/:id/edit", BookmarkLive.Form, :edit
   end
 
   # Other scopes may use custom stacks.
@@ -59,6 +55,11 @@ defmodule HackdropWeb.Router do
       on_mount: [{HackdropWeb.UserAuth, :require_authenticated}] do
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
+
+      live "/bookmarks", BookmarkLive.Index, :index
+      live "/bookmarks/new", BookmarkLive.Form, :new
+      live "/bookmarks/:id", BookmarkLive.Show, :show
+      live "/bookmarks/:id/edit", BookmarkLive.Form, :edit
     end
 
     post "/users/update-password", UserSessionController, :update_password
