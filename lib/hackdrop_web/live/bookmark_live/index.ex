@@ -6,7 +6,7 @@ defmodule HackdropWeb.BookmarkLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_scope={@current_scope}>
+    <Layouts.app flash={@flash} current_scope={@current_scope} current_path={@current_path}>
       <.header>
         Listing Bookmarks
         <:actions>
@@ -51,6 +51,11 @@ defmodule HackdropWeb.BookmarkLive.Index do
      socket
      |> assign(:page_title, "Listing Bookmarks")
      |> stream(:bookmarks, list_bookmarks(socket.assigns.current_scope))}
+  end
+
+  @impl true
+  def handle_params(_params, uri, socket) do
+    {:noreply, assign(socket, :current_path, URI.parse(uri).path)}
   end
 
   @impl true

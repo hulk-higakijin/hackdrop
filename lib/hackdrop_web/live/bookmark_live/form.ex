@@ -7,7 +7,7 @@ defmodule HackdropWeb.BookmarkLive.Form do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_scope={@current_scope}>
+    <Layouts.app flash={@flash} current_scope={@current_scope} current_path={@current_path}>
       <.header>
         {@page_title}
         <:subtitle>Use this form to manage bookmark records in your database.</:subtitle>
@@ -30,6 +30,11 @@ defmodule HackdropWeb.BookmarkLive.Form do
      socket
      |> assign(:return_to, return_to(params["return_to"]))
      |> apply_action(socket.assigns.live_action, params)}
+  end
+
+  @impl true
+  def handle_params(_params, uri, socket) do
+    {:noreply, assign(socket, :current_path, URI.parse(uri).path)}
   end
 
   defp return_to("show"), do: "show"

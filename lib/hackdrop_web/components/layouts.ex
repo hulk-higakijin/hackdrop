@@ -31,13 +31,15 @@ defmodule HackdropWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://phoenix.hexdocs.pm/scopes.html)"
 
+  attr :current_path, :string, default: ""
+
   slot :inner_block, required: true
 
   def app(assigns) do
     ~H"""
     <.sidebar_shell
       for="sb-shell"
-      class="overflow-hidden rounded-lg"
+      class="overflow-hidden"
     >
       <:sidebar>
         <.sidebar_nav id="sb-shell" label="Main">
@@ -46,6 +48,14 @@ defmodule HackdropWeb.Layouts do
             <span class="pc-sidebar__brand">Hackdrop</span>
             <.sidebar_trigger for="sb-shell" class="ml-auto" />
           </:header>
+
+          <.sidebar_item
+            label="すべてのブックマーク"
+            path="/bookmarks"
+            link_type="a"
+            icon="hero-bookmark"
+            active={String.starts_with?(@current_path, "/bookmarks")}
+          />
 
           <.sidebar_group label="Workspace">
             <.sidebar_item label="Dashboard" path="#" link_type="a" icon="hero-home" active />

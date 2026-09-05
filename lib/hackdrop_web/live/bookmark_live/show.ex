@@ -6,7 +6,7 @@ defmodule HackdropWeb.BookmarkLive.Show do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_scope={@current_scope}>
+    <Layouts.app flash={@flash} current_scope={@current_scope} current_path={@current_path}>
       <.header>
         Bookmark {@bookmark.id}
         <:subtitle>This is a bookmark record from your database.</:subtitle>
@@ -37,6 +37,11 @@ defmodule HackdropWeb.BookmarkLive.Show do
      socket
      |> assign(:page_title, "Show Bookmark")
      |> assign(:bookmark, Libraries.get_bookmark!(socket.assigns.current_scope, id))}
+  end
+
+  @impl true
+  def handle_params(_params, uri, socket) do
+    {:noreply, assign(socket, :current_path, URI.parse(uri).path)}
   end
 
   @impl true
