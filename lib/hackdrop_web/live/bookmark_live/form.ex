@@ -14,7 +14,7 @@ defmodule HackdropWeb.BookmarkLive.Form do
       </.header>
 
       <.form for={@form} id="bookmark-form" phx-change="validate" phx-submit="save">
-        <.input field={@form[:url]} type="text" label="Url" />
+        <.field field={@form[:url]} type="text" label="Url" />
         <footer>
           <.button phx-disable-with="Saving..." color="primary">Save Bookmark</.button>
           <.button

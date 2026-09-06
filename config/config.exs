@@ -24,6 +24,10 @@ config :hackdrop,
   ecto_repos: [Hackdrop.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :petal_components,
+       :error_translator_function,
+       {HackdropWeb.ErrorHelpers, :translate_error}
+
 # Configure the endpoint
 config :hackdrop, HackdropWeb.Endpoint,
   url: [host: "localhost"],

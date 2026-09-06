@@ -42,7 +42,7 @@ defmodule HackdropWeb.UserLive.Login do
           action={~p"/users/log-in"}
           phx-submit="submit_magic"
         >
-          <.input
+          <.field
             readonly={!!@current_scope}
             field={f[:email]}
             type="email"
@@ -67,7 +67,7 @@ defmodule HackdropWeb.UserLive.Login do
           phx-submit="submit_password"
           phx-trigger-action={@trigger_submit}
         >
-          <.input
+          <.field
             readonly={!!@current_scope}
             field={f[:email]}
             type="email"
@@ -76,7 +76,7 @@ defmodule HackdropWeb.UserLive.Login do
             spellcheck="false"
             required
           />
-          <.input
+          <.field
             field={@form[:password]}
             type="password"
             label="Password"
