@@ -7,17 +7,20 @@ defmodule HackdropWeb.BookmarkLive.Form do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_scope={@current_scope}>
+    <Layouts.app flash={@flash} current_scope={@current_scope} current_path={@current_path}>
       <.header>
         {@page_title}
         <:subtitle>Use this form to manage bookmark records in your database.</:subtitle>
       </.header>
 
       <.form for={@form} id="bookmark-form" phx-change="validate" phx-submit="save">
-        <.input field={@form[:url]} type="text" label="Url" />
+        <.field field={@form[:url]} type="text" label="Url" />
         <footer>
-          <.button phx-disable-with="Saving..." variant="primary">Save Bookmark</.button>
-          <.button navigate={return_path(@current_scope, @return_to, @bookmark)}>Cancel</.button>
+          <.button phx-disable-with="Saving..." color="primary">Save Bookmark</.button>
+          <.button
+            to={return_path(@current_scope, @return_to, @bookmark)}
+            link_type="live_redirect"
+          >Cancel</.button>
         </footer>
       </.form>
     </Layouts.app>
@@ -32,7 +35,11 @@ defmodule HackdropWeb.BookmarkLive.Form do
      |> apply_action(socket.assigns.live_action, params)}
   end
 
-  defp return_to("show"), do: "show"
+  @impl true
+  def handle_params(_params, uri, socket) do
+    {:noreply, assign(socket, :current_path, URI.parse(uri).path)}
+  end
+
   defp return_to(_), do: "index"
 
   defp apply_action(socket, :edit, %{"id" => id}) do
@@ -55,7 +62,13 @@ defmodule HackdropWeb.BookmarkLive.Form do
 
   @impl true
   def handle_event("validate", %{"bookmark" => bookmark_params}, socket) do
-    changeset = Libraries.change_bookmark(socket.assigns.current_scope, socket.assigns.bookmark, bookmark_params)
+    changeset =
+      Libraries.change_bookmark(
+        socket.assigns.current_scope,
+        socket.assigns.bookmark,
+        bookmark_params
+      )
+
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -64,7 +77,11 @@ defmodule HackdropWeb.BookmarkLive.Form do
   end
 
   defp save_bookmark(socket, :edit, bookmark_params) do
-    case Libraries.update_bookmark(socket.assigns.current_scope, socket.assigns.bookmark, bookmark_params) do
+    case Libraries.update_bookmark(
+           socket.assigns.current_scope,
+           socket.assigns.bookmark,
+           bookmark_params
+         ) do
       {:ok, bookmark} ->
         {:noreply,
          socket
@@ -94,5 +111,4 @@ defmodule HackdropWeb.BookmarkLive.Form do
   end
 
   defp return_path(_scope, "index", _bookmark), do: ~p"/bookmarks"
-  defp return_path(_scope, "show", bookmark), do: ~p"/bookmarks/#{bookmark}"
 end

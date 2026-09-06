@@ -23,7 +23,7 @@ defmodule HackdropWeb.UserLive.Registration do
         </div>
 
         <.form for={@form} id="registration_form" phx-submit="save" phx-change="validate">
-          <.input
+          <.field
             field={@form[:email]}
             type="email"
             label="Email"
@@ -33,7 +33,7 @@ defmodule HackdropWeb.UserLive.Registration do
             phx-mounted={JS.focus()}
           />
 
-          <.button phx-disable-with="Creating account..." class="btn btn-primary w-full">
+          <.button phx-disable-with="Creating account..." class="w-full">
             Create an account
           </.button>
         </.form>

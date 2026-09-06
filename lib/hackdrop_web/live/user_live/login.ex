@@ -42,7 +42,7 @@ defmodule HackdropWeb.UserLive.Login do
           action={~p"/users/log-in"}
           phx-submit="submit_magic"
         >
-          <.input
+          <.field
             readonly={!!@current_scope}
             field={f[:email]}
             type="email"
@@ -52,7 +52,7 @@ defmodule HackdropWeb.UserLive.Login do
             required
             phx-mounted={JS.focus()}
           />
-          <.button class="btn btn-primary w-full">
+          <.button class="w-full">
             Log in with email <span aria-hidden="true">→</span>
           </.button>
         </.form>
@@ -67,7 +67,7 @@ defmodule HackdropWeb.UserLive.Login do
           phx-submit="submit_password"
           phx-trigger-action={@trigger_submit}
         >
-          <.input
+          <.field
             readonly={!!@current_scope}
             field={f[:email]}
             type="email"
@@ -76,17 +76,17 @@ defmodule HackdropWeb.UserLive.Login do
             spellcheck="false"
             required
           />
-          <.input
+          <.field
             field={@form[:password]}
             type="password"
             label="Password"
             autocomplete="current-password"
             spellcheck="false"
           />
-          <.button class="btn btn-primary w-full" name={@form[:remember_me].name} value="true">
+          <.button class="w-full" name={@form[:remember_me].name} value="true">
             Log in and stay logged in <span aria-hidden="true">→</span>
           </.button>
-          <.button class="btn btn-primary btn-soft w-full mt-2">
+          <.button variant="soft" class="w-full mt-2">
             Log in only this time
           </.button>
         </.form>

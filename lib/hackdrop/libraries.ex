@@ -7,6 +7,7 @@ defmodule Hackdrop.Libraries do
   alias Hackdrop.Repo
 
   alias Hackdrop.Libraries.Bookmark
+  alias Hackdrop.Libraries.Ogp
   alias Hackdrop.Accounts.Scope
 
   @doc """
@@ -77,7 +78,7 @@ defmodule Hackdrop.Libraries do
   def create_bookmark(%Scope{} = scope, attrs) do
     with {:ok, bookmark = %Bookmark{}} <-
            %Bookmark{}
-           |> Bookmark.changeset(attrs, scope)
+           |> bookmark_changeset(attrs, scope)
            |> Repo.insert() do
       broadcast_bookmark(scope, {:created, bookmark})
       {:ok, bookmark}
@@ -101,7 +102,7 @@ defmodule Hackdrop.Libraries do
 
     with {:ok, bookmark = %Bookmark{}} <-
            bookmark
-           |> Bookmark.changeset(attrs, scope)
+           |> bookmark_changeset(attrs, scope)
            |> Repo.update() do
       broadcast_bookmark(scope, {:updated, bookmark})
       {:ok, bookmark}
@@ -143,5 +144,25 @@ defmodule Hackdrop.Libraries do
     true = bookmark.user_id == scope.user.id
 
     Bookmark.changeset(bookmark, attrs, scope)
+  end
+
+  defp bookmark_changeset(%Bookmark{} = bookmark, attrs, %Scope{} = scope) do
+    changeset = Bookmark.changeset(bookmark, attrs, scope)
+
+    if changeset.valid? do
+      metadata = Ogp.fetch_metadata(Ecto.Changeset.get_field(changeset, :url))
+
+      case metadata do
+        {:ok, %{image_url: preview_url, title: title}} ->
+          changeset
+          |> Ecto.Changeset.put_change(:preview_url, preview_url)
+          |> Ecto.Changeset.put_change(:title, title)
+
+        :error ->
+          changeset
+      end
+    else
+      changeset
+    end
   end
 end

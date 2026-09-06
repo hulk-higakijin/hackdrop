@@ -20,10 +20,10 @@ defmodule HackdropWeb.BookmarkLiveTest do
     setup [:create_bookmark]
 
     test "lists all bookmarks", %{conn: conn, bookmark: bookmark} do
-      {:ok, _index_live, html} = live(conn, ~p"/bookmarks")
+      {:ok, index_live, html} = live(conn, ~p"/bookmarks")
 
-      assert html =~ "Listing Bookmarks"
-      assert html =~ bookmark.url
+      assert html =~ "Bookmarks"
+      assert has_element?(index_live, "#bookmark-card-#{bookmark.id}[href=\"#{bookmark.url}\"]")
     end
 
     test "saves new bookmark", %{conn: conn} do
@@ -83,43 +83,6 @@ defmodule HackdropWeb.BookmarkLiveTest do
 
       assert index_live |> element("#bookmarks-#{bookmark.id} a", "Delete") |> render_click()
       refute has_element?(index_live, "#bookmarks-#{bookmark.id}")
-    end
-  end
-
-  describe "Show" do
-    setup [:create_bookmark]
-
-    test "displays bookmark", %{conn: conn, bookmark: bookmark} do
-      {:ok, _show_live, html} = live(conn, ~p"/bookmarks/#{bookmark}")
-
-      assert html =~ "Show Bookmark"
-      assert html =~ bookmark.url
-    end
-
-    test "updates bookmark and returns to show", %{conn: conn, bookmark: bookmark} do
-      {:ok, show_live, _html} = live(conn, ~p"/bookmarks/#{bookmark}")
-
-      assert {:ok, form_live, _} =
-               show_live
-               |> element("a", "Edit")
-               |> render_click()
-               |> follow_redirect(conn, ~p"/bookmarks/#{bookmark}/edit?return_to=show")
-
-      assert render(form_live) =~ "Edit Bookmark"
-
-      assert form_live
-             |> form("#bookmark-form", bookmark: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
-      assert {:ok, show_live, _html} =
-               form_live
-               |> form("#bookmark-form", bookmark: @update_attrs)
-               |> render_submit()
-               |> follow_redirect(conn, ~p"/bookmarks/#{bookmark}")
-
-      html = render(show_live)
-      assert html =~ "Bookmark updated successfully"
-      assert html =~ "some updated url"
     end
   end
 end

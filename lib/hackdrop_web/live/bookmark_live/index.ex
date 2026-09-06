@@ -6,37 +6,62 @@ defmodule HackdropWeb.BookmarkLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_scope={@current_scope}>
+    <Layouts.app flash={@flash} current_scope={@current_scope} current_path={@current_path}>
       <.header>
-        Listing Bookmarks
+        Bookmarks
         <:actions>
-          <.button variant="primary" navigate={~p"/bookmarks/new"}>
+          <.button to={~p"/bookmarks/new"} link_type="live_redirect">
             <.icon name="hero-plus" /> New Bookmark
           </.button>
         </:actions>
       </.header>
 
-      <.table
+      <div
         id="bookmarks"
-        rows={@streams.bookmarks}
-        row_click={fn {_id, bookmark} -> JS.navigate(~p"/bookmarks/#{bookmark}") end}
+        phx-update="stream"
+        class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4"
       >
-        <:col :let={{_id, bookmark}} label="Url">{bookmark.url}</:col>
-        <:action :let={{_id, bookmark}}>
-          <div class="sr-only">
-            <.link navigate={~p"/bookmarks/#{bookmark}"}>Show</.link>
-          </div>
-          <.link navigate={~p"/bookmarks/#{bookmark}/edit"}>Edit</.link>
-        </:action>
-        <:action :let={{id, bookmark}}>
-          <.link
-            phx-click={JS.push("delete", value: %{id: bookmark.id}) |> hide("##{id}")}
-            data-confirm="Are you sure?"
+        <div :for={{id, bookmark} <- @streams.bookmarks} id={id} class="group flex flex-col">
+          <a
+            id={"bookmark-card-#{bookmark.id}"}
+            href={bookmark.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block flex-1 rounded-2xl transition duration-200 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
-            Delete
-          </.link>
-        </:action>
-      </.table>
+            <.card class="h-full overflow-hidden transition duration-200 group-hover:border-primary/50 group-hover:shadow-xl">
+              <.card_media
+                src={bookmark.preview_url}
+                alt=""
+                aspect_ratio_class="aspect-video w-full object-cover transition duration-300 group-hover:scale-105"
+              />
+              <.card_content class="flex min-h-24 flex-col gap-2 p-5">
+                <h2 class="line-clamp-2 text-lg font-semibold text-base-content">
+                  {bookmark.title || "No title"}
+                </h2>
+                <p class="mt-auto line-clamp-2 break-all text-sm text-base-content/60">
+                  {bookmark.url}
+                </p>
+              </.card_content>
+            </.card>
+          </a>
+          <div class="flex items-center justify-end gap-3 px-2 pt-3 text-sm">
+            <.link
+              navigate={~p"/bookmarks/#{bookmark}/edit"}
+              class="text-base-content/60 hover:text-primary"
+            >
+              Edit
+            </.link>
+            <.link
+              phx-click={JS.push("delete", value: %{id: bookmark.id}) |> hide("##{id}")}
+              data-confirm="Are you sure?"
+              class="text-base-content/60 hover:text-error"
+            >
+              Delete
+            </.link>
+          </div>
+        </div>
+      </div>
     </Layouts.app>
     """
   end
@@ -54,6 +79,11 @@ defmodule HackdropWeb.BookmarkLive.Index do
   end
 
   @impl true
+  def handle_params(_params, uri, socket) do
+    {:noreply, assign(socket, :current_path, URI.parse(uri).path)}
+  end
+
+  @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     bookmark = Libraries.get_bookmark!(socket.assigns.current_scope, id)
     {:ok, _} = Libraries.delete_bookmark(socket.assigns.current_scope, bookmark)
@@ -64,7 +94,8 @@ defmodule HackdropWeb.BookmarkLive.Index do
   @impl true
   def handle_info({type, %Hackdrop.Libraries.Bookmark{}}, socket)
       when type in [:created, :updated, :deleted] do
-    {:noreply, stream(socket, :bookmarks, list_bookmarks(socket.assigns.current_scope), reset: true)}
+    {:noreply,
+     stream(socket, :bookmarks, list_bookmarks(socket.assigns.current_scope), reset: true)}
   end
 
   defp list_bookmarks(current_scope) do

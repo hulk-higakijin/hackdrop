@@ -25,7 +25,10 @@ defmodule Hackdrop.LibrariesTest do
       bookmark = bookmark_fixture(scope)
       other_scope = user_scope_fixture()
       assert Libraries.get_bookmark!(scope, bookmark.id) == bookmark
-      assert_raise Ecto.NoResultsError, fn -> Libraries.get_bookmark!(other_scope, bookmark.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Libraries.get_bookmark!(other_scope, bookmark.id)
+      end
     end
 
     test "create_bookmark/2 with valid data creates a bookmark" do
@@ -47,7 +50,9 @@ defmodule Hackdrop.LibrariesTest do
       bookmark = bookmark_fixture(scope)
       update_attrs = %{url: "some updated url"}
 
-      assert {:ok, %Bookmark{} = bookmark} = Libraries.update_bookmark(scope, bookmark, update_attrs)
+      assert {:ok, %Bookmark{} = bookmark} =
+               Libraries.update_bookmark(scope, bookmark, update_attrs)
+
       assert bookmark.url == "some updated url"
     end
 
@@ -64,7 +69,10 @@ defmodule Hackdrop.LibrariesTest do
     test "update_bookmark/3 with invalid data returns error changeset" do
       scope = user_scope_fixture()
       bookmark = bookmark_fixture(scope)
-      assert {:error, %Ecto.Changeset{}} = Libraries.update_bookmark(scope, bookmark, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Libraries.update_bookmark(scope, bookmark, @invalid_attrs)
+
       assert bookmark == Libraries.get_bookmark!(scope, bookmark.id)
     end
 

@@ -31,42 +31,60 @@ defmodule HackdropWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://phoenix.hexdocs.pm/scopes.html)"
 
+  attr :current_path, :string, default: ""
+
   slot :inner_block, required: true
 
   def app(assigns) do
     ~H"""
-    <header class="navbar px-4 sm:px-6 lg:px-8">
-      <div class="flex-1">
-        <a href="/" class="flex-1 flex w-fit items-center gap-2">
-          <img src={~p"/images/logo.svg"} width="36" />
-          <span class="text-sm font-semibold">v{Application.spec(:phoenix, :vsn)}</span>
-        </a>
-      </div>
-      <div class="flex-none">
-        <ul class="flex flex-column px-1 space-x-4 items-center">
-          <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
-          </li>
-          <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
-          </li>
-          <li>
-            <.theme_toggle />
-          </li>
-          <li>
-            <a href="https://phoenix.hexdocs.pm/overview.html" class="btn btn-primary">
-              Get Started <span aria-hidden="true">&rarr;</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </header>
+    <.sidebar_shell
+      for="sb-shell"
+      class="overflow-hidden"
+    >
+      <:sidebar>
+        <.sidebar_nav id="sb-shell" label="Main">
+          <:header>
+            <.icon name="hero-cube" class="w-5 h-5 shrink-0 text-primary-500" />
+            <span class="pc-sidebar__brand">Hackdrop</span>
+            <.sidebar_trigger for="sb-shell" class="ml-auto" />
+          </:header>
 
-    <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl space-y-4">
+          <.sidebar_item
+            label="すべてのブックマーク"
+            path="/bookmarks"
+            link_type="a"
+            icon="hero-bookmark"
+            active={String.starts_with?(@current_path, "/bookmarks")}
+          />
+
+          <.sidebar_item label="未分類" path="#" link_type="a" icon="hero-tag" />
+          <.sidebar_item label="お気に入り" path="#" link_type="a" icon="hero-star" />
+          <.sidebar_item
+            label="あとで読む"
+            path="#"
+            link_type="a"
+            icon="hero-clipboard-document-check"
+          />
+
+          <:footer>
+            <.sidebar_item
+              label="Sign out"
+              path="#"
+              link_type="a"
+              icon="hero-arrow-left-start-on-rectangle"
+            />
+          </:footer>
+        </.sidebar_nav>
+      </:sidebar>
+
+      <header class="flex items-center flex-none gap-3 px-4 border-b border-gray-200 h-14 dark:border-gray-800">
+        <.sidebar_trigger for="sb-shell" target="mobile" />
+        <span class="text-sm font-semibold">Dashboard</span>
+      </header>
+      <div class="p-4 text-sm text-gray-500 dark:text-gray-400">
         {render_slot(@inner_block)}
       </div>
-    </main>
+    </.sidebar_shell>
 
     <.flash_group flash={@flash} />
     """

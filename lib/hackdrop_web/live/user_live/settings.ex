@@ -17,7 +17,7 @@ defmodule HackdropWeb.UserLive.Settings do
       </div>
 
       <.form for={@email_form} id="email_form" phx-submit="update_email" phx-change="validate_email">
-        <.input
+        <.field
           field={@email_form[:email]}
           type="email"
           label="Email"
@@ -25,7 +25,7 @@ defmodule HackdropWeb.UserLive.Settings do
           spellcheck="false"
           required
         />
-        <.button variant="primary" phx-disable-with="Changing...">Change Email</.button>
+        <.button color="primary" phx-disable-with="Changing...">Change Email</.button>
       </.form>
 
       <div class="divider" />
@@ -46,7 +46,7 @@ defmodule HackdropWeb.UserLive.Settings do
           spellcheck="false"
           value={@current_email}
         />
-        <.input
+        <.field
           field={@password_form[:password]}
           type="password"
           label="New password"
@@ -54,14 +54,14 @@ defmodule HackdropWeb.UserLive.Settings do
           spellcheck="false"
           required
         />
-        <.input
+        <.field
           field={@password_form[:password_confirmation]}
           type="password"
           label="Confirm new password"
           autocomplete="new-password"
           spellcheck="false"
         />
-        <.button variant="primary" phx-disable-with="Saving...">
+        <.button color="primary" phx-disable-with="Saving...">
           Save Password
         </.button>
       </.form>
