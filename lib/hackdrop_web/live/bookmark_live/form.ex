@@ -40,7 +40,6 @@ defmodule HackdropWeb.BookmarkLive.Form do
     {:noreply, assign(socket, :current_path, URI.parse(uri).path)}
   end
 
-  defp return_to("show"), do: "show"
   defp return_to(_), do: "index"
 
   defp apply_action(socket, :edit, %{"id" => id}) do
@@ -112,5 +111,4 @@ defmodule HackdropWeb.BookmarkLive.Form do
   end
 
   defp return_path(_scope, "index", _bookmark), do: ~p"/bookmarks"
-  defp return_path(_scope, "show", bookmark), do: ~p"/bookmarks/#{bookmark}"
 end

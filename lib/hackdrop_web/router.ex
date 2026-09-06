@@ -57,7 +57,6 @@ defmodule HackdropWeb.Router do
 
       live "/bookmarks", BookmarkLive.Index, :index
       live "/bookmarks/new", BookmarkLive.Form, :new
-      live "/bookmarks/:id", BookmarkLive.Show, :show
       live "/bookmarks/:id/edit", BookmarkLive.Form, :edit
     end
 
