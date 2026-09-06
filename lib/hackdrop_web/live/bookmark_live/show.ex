@@ -25,6 +25,7 @@ defmodule HackdropWeb.BookmarkLive.Show do
 
       <.list>
         <:item title="Url">{@bookmark.url}</:item>
+        <:item title="Title">{@bookmark.title || "No title available"}</:item>
         <:item title="Preview">
           <%= if @bookmark.preview_url do %>
             <img

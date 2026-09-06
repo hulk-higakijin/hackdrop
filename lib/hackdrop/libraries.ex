@@ -150,17 +150,19 @@ defmodule Hackdrop.Libraries do
     changeset = Bookmark.changeset(bookmark, attrs, scope)
 
     if changeset.valid? do
-      preview_url = fetch_preview_url(Ecto.Changeset.get_field(changeset, :url))
-      Ecto.Changeset.put_change(changeset, :preview_url, preview_url)
+      metadata = Ogp.fetch_metadata(Ecto.Changeset.get_field(changeset, :url))
+
+      case metadata do
+        {:ok, %{image_url: preview_url, title: title}} ->
+          changeset
+          |> Ecto.Changeset.put_change(:preview_url, preview_url)
+          |> Ecto.Changeset.put_change(:title, title)
+
+        :error ->
+          changeset
+      end
     else
       changeset
-    end
-  end
-
-  defp fetch_preview_url(url) do
-    case Ogp.fetch_image_url(url) do
-      {:ok, preview_url} -> preview_url
-      :error -> nil
     end
   end
 end

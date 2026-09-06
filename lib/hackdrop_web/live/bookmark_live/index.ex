@@ -34,6 +34,7 @@ defmodule HackdropWeb.BookmarkLive.Index do
           <% end %>
         </:col>
         <:col :let={{_id, bookmark}} label="Url">{bookmark.url}</:col>
+        <:col :let={{_id, bookmark}} label="Title">{bookmark.title || "No title"}</:col>
         <:action :let={{_id, bookmark}}>
           <div class="sr-only">
             <.link navigate={~p"/bookmarks/#{bookmark}"}>Show</.link>
