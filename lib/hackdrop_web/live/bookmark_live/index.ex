@@ -21,6 +21,18 @@ defmodule HackdropWeb.BookmarkLive.Index do
         rows={@streams.bookmarks}
         row_click={fn {_id, bookmark} -> JS.navigate(~p"/bookmarks/#{bookmark}") end}
       >
+        <:col :let={{_id, bookmark}} label="Preview">
+          <%= if bookmark.preview_url do %>
+            <img
+              id={"bookmark-preview-#{bookmark.id}"}
+              src={bookmark.preview_url}
+              alt=""
+              class="h-12 w-20 rounded object-cover"
+            />
+          <% else %>
+            <span class="text-sm text-base-content/50">No image</span>
+          <% end %>
+        </:col>
         <:col :let={{_id, bookmark}} label="Url">{bookmark.url}</:col>
         <:action :let={{_id, bookmark}}>
           <div class="sr-only">

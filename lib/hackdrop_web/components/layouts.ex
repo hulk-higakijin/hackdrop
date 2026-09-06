@@ -59,7 +59,12 @@ defmodule HackdropWeb.Layouts do
 
           <.sidebar_item label="未分類" path="#" link_type="a" icon="hero-tag" />
           <.sidebar_item label="お気に入り" path="#" link_type="a" icon="hero-star" />
-          <.sidebar_item label="あとで読む" path="#" link_type="a" icon="hero-clipboard-document-check" />
+          <.sidebar_item
+            label="あとで読む"
+            path="#"
+            link_type="a"
+            icon="hero-clipboard-document-check"
+          />
 
           <:footer>
             <.sidebar_item

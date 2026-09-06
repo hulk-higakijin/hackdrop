@@ -5,6 +5,7 @@ defmodule Hackdrop.Libraries.Bookmark do
 
   schema "bookmarks" do
     field :url, :string
+    field :preview_url, :string
     field :user_id, :id
 
     timestamps(type: :utc_datetime)
@@ -16,6 +17,7 @@ defmodule Hackdrop.Libraries.Bookmark do
     |> cast(attrs, [:url])
     |> validate_required([:url])
     |> validate_url(:url)
+    |> put_change(:preview_url, nil)
     |> put_change(:user_id, user_scope.user.id)
   end
 end

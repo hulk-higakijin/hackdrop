@@ -22,6 +22,18 @@ defmodule HackdropWeb.BookmarkLive.Show do
 
       <.list>
         <:item title="Url">{@bookmark.url}</:item>
+        <:item title="Preview">
+          <%= if @bookmark.preview_url do %>
+            <img
+              id="bookmark-preview"
+              src={@bookmark.preview_url}
+              alt=""
+              class="max-h-64 max-w-full rounded-lg object-cover"
+            />
+          <% else %>
+            <span class="text-sm text-base-content/50">No image available</span>
+          <% end %>
+        </:item>
       </.list>
     </Layouts.app>
     """
