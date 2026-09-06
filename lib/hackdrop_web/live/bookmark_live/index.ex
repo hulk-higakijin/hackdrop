@@ -10,7 +10,7 @@ defmodule HackdropWeb.BookmarkLive.Index do
       <.header>
         Listing Bookmarks
         <:actions>
-          <.button variant="primary" navigate={~p"/bookmarks/new"}>
+          <.button to={~p"/bookmarks/new"} link_type="live_redirect">
             <.icon name="hero-plus" /> New Bookmark
           </.button>
         </:actions>

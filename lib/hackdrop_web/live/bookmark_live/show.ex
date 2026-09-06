@@ -11,10 +11,13 @@ defmodule HackdropWeb.BookmarkLive.Show do
         Bookmark {@bookmark.id}
         <:subtitle>This is a bookmark record from your database.</:subtitle>
         <:actions>
-          <.button navigate={~p"/bookmarks"}>
+          <.button to={~p"/bookmarks"} link_type="live_redirect">
             <.icon name="hero-arrow-left" />
           </.button>
-          <.button variant="primary" navigate={~p"/bookmarks/#{@bookmark}/edit?return_to=show"}>
+          <.button
+            to={~p"/bookmarks/#{@bookmark}/edit?return_to=show"}
+            link_type="live_redirect"
+          >
             <.icon name="hero-pencil-square" /> Edit bookmark
           </.button>
         </:actions>

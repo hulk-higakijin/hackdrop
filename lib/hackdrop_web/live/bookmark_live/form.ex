@@ -16,8 +16,11 @@ defmodule HackdropWeb.BookmarkLive.Form do
       <.form for={@form} id="bookmark-form" phx-change="validate" phx-submit="save">
         <.input field={@form[:url]} type="text" label="Url" />
         <footer>
-          <.button phx-disable-with="Saving..." variant="primary">Save Bookmark</.button>
-          <.button navigate={return_path(@current_scope, @return_to, @bookmark)}>Cancel</.button>
+          <.button phx-disable-with="Saving..." color="primary">Save Bookmark</.button>
+          <.button
+            to={return_path(@current_scope, @return_to, @bookmark)}
+            link_type="live_redirect"
+          >Cancel</.button>
         </footer>
       </.form>
     </Layouts.app>

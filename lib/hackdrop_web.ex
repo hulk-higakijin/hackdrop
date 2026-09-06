@@ -99,6 +99,7 @@ defmodule HackdropWeb do
         BorderPlasma,
         BrandIcon,
         Breadcrumbs,
+        Button,
         ButtonGroup,
         Calendar,
         Card,

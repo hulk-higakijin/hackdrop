@@ -25,7 +25,7 @@ defmodule HackdropWeb.UserLive.Settings do
           spellcheck="false"
           required
         />
-        <.button variant="primary" phx-disable-with="Changing...">Change Email</.button>
+        <.button color="primary" phx-disable-with="Changing...">Change Email</.button>
       </.form>
 
       <div class="divider" />
@@ -61,7 +61,7 @@ defmodule HackdropWeb.UserLive.Settings do
           autocomplete="new-password"
           spellcheck="false"
         />
-        <.button variant="primary" phx-disable-with="Saving...">
+        <.button color="primary" phx-disable-with="Saving...">
           Save Password
         </.button>
       </.form>
